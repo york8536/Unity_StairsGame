@@ -9,6 +9,7 @@ public class player : MonoBehaviour
     GameObject currentFloor; //建立一個GameObject變數
 
     [SerializeField] int Hp;
+    [SerializeField] GameObject HpBar;
 
     // Start is called before the first frame update
     void Start()
@@ -33,19 +34,22 @@ public class player : MonoBehaviour
 
     
     void OnCollisionEnter2D(Collision2D other) {
-        // 將當前踩到的地板帶入變數中
+        // 如果踩到一般地板
         if (other.gameObject.tag == "Normal"){
-            if(other.contacts[0].normal == new Vector2(0f, 1f)){ // 如果碰撞到底板的上邊
+            // 如果碰撞到底板的上邊
+            if(other.contacts[0].normal == new Vector2(0f, 1f)){ 
                 Debug.Log("Normal");
                 currentFloor = other.gameObject;
+                // 回1滴血
                 ModifyHp(1);
             }
         }
-
+        // 如果踩到有刺地板
         else if (other.gameObject.tag == "Nails"){
             if(other.contacts[0].normal == new Vector2(0f, 1f)){
                 Debug.Log("Nails");
                 currentFloor = other.gameObject;
+                // 扣三滴血
                 ModifyHp(-3);
             }
         }
@@ -72,5 +76,20 @@ public class player : MonoBehaviour
         else if(Hp < 0){
             Hp = 0;
         }
+        UpdateHpBar();
     }
+
+    void UpdateHpBar()
+    {
+        for(int i=0; i<HpBar.transform.childCount; i++){
+            if(Hp>i){
+                HpBar.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            else{
+                HpBar.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+       
+    }
+
 }
