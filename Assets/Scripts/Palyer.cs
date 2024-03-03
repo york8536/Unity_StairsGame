@@ -1,21 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class player : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
-
     GameObject currentFloor; //建立一個GameObject變數
-
     [SerializeField] int Hp;
     [SerializeField] GameObject HpBar;
+    [SerializeField] TMP_Text scoreText ; 
+
+    int score;
+    float scoreTime;
 
     // Start is called before the first frame update
     void Start()
     {
         Hp = 10;
-
+        score = 0;
+        scoreTime = 0f;
 
     }
 
@@ -29,6 +34,7 @@ public class player : MonoBehaviour
         else if(Input.GetKey(KeyCode.LeftArrow)){
             transform.Translate(-moveSpeed*Time.deltaTime, 0, 0);
         }
+        UpdateScore();
        
     }
 
@@ -90,6 +96,15 @@ public class player : MonoBehaviour
             }
         }
        
+    }
+
+    void UpdateScore(){
+        scoreTime += Time.deltaTime;
+        if(scoreTime>2f){
+            score++;
+            scoreTime = 0f;
+            scoreText.text = "地下" + score.ToString() + "層";
+        }
     }
 
 }
